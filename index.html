@@ -26,6 +26,16 @@
       * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
       body { background-color: var(--bg-color); color: white; overflow: hidden; width: 100vw; height: 100vh; font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
 
+      /* --- PRELOADER (1.png / 2.png Loop) --- */
+      #preloader {
+        position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #000000; z-index: 9999; display: flex; flex-direction: column;
+        justify-content: center; align-items: center; transition: opacity 0.5s ease;
+      }
+      #preloader-img { width: 180px; filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.5)); transition: transform 0.1s ease; }
+      .preloader-text { margin-top: 25px; color: var(--neon-cyan); font-family: 'Courier New', monospace; font-weight: bold; letter-spacing: 5px; animation: pulse 1s infinite alternate; }
+      @keyframes pulse { from { opacity: 0.5; } to { opacity: 1; } }
+
       #webgl-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; cursor: grab; }
       #webgl-container:active { cursor: grabbing; }
 
@@ -239,6 +249,11 @@
     </style>
   </head>
   <body>
+    <div id="preloader">
+      <img id="preloader-img" src="1.png" alt="Loading">
+      <div class="preloader-text">INITIALIZING ENGINE...</div>
+    </div>
+
     <div id="intro-screen">
       <h1 id="brand-title">SOMIUSIK</h1>
 
@@ -353,8 +368,6 @@
           </button>
         </div>
       </div>
-
-      <p id="loading-text" style="margin-top: 20px; color: #555; font-size: 0.8rem; letter-spacing: 1px; font-family: 'Courier New', Courier, monospace; display: none;">AWAITING OPTICAL TRACKING PERMISSIONS</p>
     </div>
 
     <div id="scroll-hint">
@@ -421,7 +434,26 @@
       import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
       /* =========================================================================
-           0. MOBILE DETECT, FULLSCREEN & INTRO UI LOGIC
+           0. PRELOADER LOGIC (Runs Immediately)
+           ========================================================================= */
+      let preloaderCycles = 0;
+      const preloaderImg = document.getElementById("preloader-img");
+      const preloaderWrap = document.getElementById("preloader");
+      
+      const preloaderInterval = setInterval(() => {
+        preloaderCycles++;
+        preloaderImg.src = (preloaderCycles % 2 === 0) ? '1.png' : '2.png';
+        
+        // 8 cycles = 4 full loops (2 seconds total at 250ms per tick)
+        if (preloaderCycles >= 8) { 
+          clearInterval(preloaderInterval);
+          preloaderWrap.style.opacity = '0';
+          setTimeout(() => { preloaderWrap.style.display = 'none'; }, 500);
+        }
+      }, 250);
+
+      /* =========================================================================
+           1. MOBILE DETECT, FULLSCREEN & INTRO UI LOGIC
            ========================================================================= */
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
@@ -437,12 +469,9 @@
         document.getElementById("mobile-warning").style.display = "block";
         document.getElementById("gesture-tutorial-container").style.display = "none";
         document.getElementById("gesture-label").innerText = "OFFLINE (MOBILE)";
-        
-        // Hide Desktop Button
         document.querySelectorAll('.desktop-only').forEach(el => el.style.display = 'none');
       } else {
         introScreen.style.cursor = "none";
-        // Hide Mobile Buttons
         document.querySelectorAll('.mobile-only').forEach(el => el.style.display = 'none');
       }
 
@@ -464,25 +493,20 @@
         document.getElementById("selection-buttons-container").style.display = "flex";
       });
 
-      // DESKTOP ONLY: Always runs gestures
+      // DESKTOP ONLY
       document.getElementById("btn-desktop-start").addEventListener("click", () => {
-        useGestures = true;
-        startExperience();
+        useGestures = true; startExperience();
       });
 
-      // MOBILE ONLY: Touch
+      // MOBILE ONLY
       document.getElementById("btn-mobile-standard").addEventListener("click", () => {
-        useGestures = false;
-        startExperience();
+        useGestures = false; startExperience();
       });
-
-      // MOBILE ONLY: Gestures
       document.getElementById("btn-mobile-handsfree").addEventListener("click", () => {
-        useGestures = true;
-        startExperience();
+        useGestures = true; startExperience();
       });
       
-      // BOTH DEVICES: Manual
+      // BOTH DEVICES
       document.getElementById("btn-tutorial").addEventListener("click", () => {
         document.getElementById("selection-buttons-container").style.display = "none";
         brandTitle.style.display = "none"; 
@@ -492,9 +516,8 @@
         if (!isMobile) introScreen.style.cursor = "default"; 
       });
       
-      // LAUNCH FROM MANUAL
       document.getElementById("btn-start-from-tutorial").addEventListener("click", () => {
-        useGestures = !isMobile; // Auto-activate if on PC, disable if on Mobile (unless they clicked hands-free first, but this resets it cleanly)
+        useGestures = !isMobile; 
         startExperience();
       });
 
@@ -590,6 +613,7 @@
 
       let targetDeck = null; 
       
+      // 6-SIDED CAROUSEL MATH
       function updateCarouselVideos() {
           let normalizedAngle = ((-currentAngle % 360) + 360) % 360;
           let activeIndex = Math.round(normalizedAngle / 60) % 6;
@@ -678,7 +702,7 @@
       };
 
       /* =========================================================================
-           1. 3D SYSTEM & LIGHTING
+           2. 3D SYSTEM & LIGHTING
            ========================================================================= */
       const container = document.getElementById("webgl-container");
       const scene = new THREE.Scene();
@@ -687,13 +711,14 @@
       const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 500);
       camera.position.set(0, 20, 30);
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(window.devicePixelRatio);
+      // PERFORMANCE FIX: Caps the pixel ratio so it doesn't lag out high-DPI screens and mobiles
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25)); 
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.4;
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.shadowMap.type = THREE.PCFShadowMap; // Performance optimized shadow map
       container.appendChild(renderer.domElement);
 
       const controls = new OrbitControls(camera, renderer.domElement);
@@ -728,7 +753,7 @@
       const matVideoScreen = new THREE.MeshBasicMaterial({ map: new THREE.VideoTexture(centerVideoEl), color: 0xffffff }); 
 
       /* =========================================================================
-           2. 3D MODELS (DECKS, MIXER, SCREEN & SAMPLER PADS)
+           3. 3D MODELS (DECKS, MIXER, SCREEN & SAMPLER PADS)
            ========================================================================= */
       const stageGroup = new THREE.Group();
       const bigScreenGeo = new THREE.CylinderGeometry(80, 80, 45, 64, 1, true, Math.PI - 0.55, 1.1); 
@@ -916,7 +941,7 @@
       djSetupGroup.add(mixer); scene.add(djSetupGroup);
 
       /* =========================================================================
-           3. AUDIO ENGINE & LIVE SYNTHESIZER FOR SFX PADS
+           4. AUDIO ENGINE & LIVE SYNTHESIZER FOR SFX PADS
            ========================================================================= */
       function updateUIState(side) {
         const isPlaying = side === "L" ? State.isPlayingL : State.isPlayingR;
@@ -1046,7 +1071,7 @@
       const audio = new AudioEngine();
 
       /* =========================================================================
-           4. MOUSE & TOUCH EVENT HANDLERS
+           5. MOUSE & TOUCH EVENT HANDLERS
            ========================================================================= */
       const raycaster = new THREE.Raycaster(); const mouse = new THREE.Vector2();
       let activeObj = null; let startMouseY = 0; let startMouseX = 0; let startRot = 0;
@@ -1142,7 +1167,7 @@
       window.addEventListener("touchend", handleInteractionEnd);
 
       /* =========================================================================
-           5. ANIMATION LOOP
+           6. ANIMATION LOOP
            ========================================================================= */
       function animate() {
         requestAnimationFrame(animate); controls.update();
@@ -1187,7 +1212,7 @@
       });
 
       /* =========================================================================
-           6. COMPUTER VISION GESTURES 
+           7. COMPUTER VISION GESTURES 
            ========================================================================= */
       const videoElementTracker = document.querySelector(".input_video");
       const gestureLabel = document.getElementById("gesture-label");
