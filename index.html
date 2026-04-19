@@ -52,13 +52,57 @@
         pointer-events: none;
         z-index: 50;
       }
-      .cyber-btn {
-        padding: 15px 40px; background: transparent; border: 2px solid var(--neon-red);
-        color: var(--neon-red); font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
-        letter-spacing: 3px; border-radius: 4px; box-shadow: 0 0 15px rgba(204, 0, 0, 0.4);
-        transition: all 0.3s ease; z-index: 51; font-family: "Courier New", monospace; font-weight: bold; margin: 10px;
+
+      /* --- ULTRA PREMIUM UI BUTTONS --- */
+      .premium-btn {
+        position: relative;
+        padding: 16px 36px;
+        background: rgba(20, 20, 25, 0.65);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+        font-size: 0.9rem; font-weight: 600; letter-spacing: 3px;
+        text-transform: uppercase; cursor: pointer;
+        overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        display: flex; justify-content: center; align-items: center; gap: 10px;
       }
-      .cyber-btn:hover { background: var(--neon-red); color: #000; box-shadow: 0 0 30px var(--neon-red); cursor: pointer; }
+      .premium-btn::before {
+        content: ''; position: absolute; top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+        transition: left 0.6s ease;
+      }
+      .premium-btn:hover::before { left: 100%; }
+      .premium-btn:hover {
+        background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+      }
+      .accent-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; }
+      
+      .btn-cyan:hover { color: var(--neon-cyan); }
+      .btn-cyan .accent-bar { background: var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan); }
+      
+      .btn-green:hover { color: var(--neon-green); }
+      .btn-green .accent-bar { background: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
+      
+      .btn-orange:hover { color: var(--neon-orange); }
+      .btn-orange .accent-bar { background: var(--neon-orange); box-shadow: 0 0 15px var(--neon-orange); }
+
+      .btn-red:hover { color: var(--neon-red); }
+      .btn-red .accent-bar { background: var(--neon-red); box-shadow: 0 0 15px var(--neon-red); }
+
+      #mobile-warning {
+        display: none; color: rgba(255,255,255,0.5); font-family: 'Courier New', Courier, monospace; 
+        font-weight: bold; text-align: center; margin-top: 20px; line-height: 1.5; font-size: 0.85rem; letter-spacing: 1px;
+      }
+
+      #selection-buttons-container {
+        display: none; background: rgba(10, 10, 15, 0.4); border: 1px solid rgba(255,255,255,0.05);
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 16px;
+        padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 51; flex-direction: column; align-items: center;
+      }
 
       /* --- PRO UI/UX SYSTEM MANUAL (HUD) --- */
       #tutorial-panel {
@@ -111,17 +155,7 @@
       .control-card .desc { color: #888; font-size: 0.8rem; font-weight: 500; text-align: right; }
       .control-card .desc.highlight { color: var(--neon-green); }
 
-      /* --- INTERACTIVE MISSION HUD --- */
-      #mission-hud {
-        position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-        background: rgba(10, 10, 15, 0.9); border: 2px solid var(--neon-orange);
-        padding: 20px 40px; border-radius: 8px; box-shadow: 0 0 30px rgba(255, 170, 0, 0.3);
-        z-index: 45; display: none; text-align: center; pointer-events: none;
-      }
-      #mission-hud h3 { color: var(--neon-orange); letter-spacing: 4px; font-family: 'Courier New', monospace; font-size: 0.9rem; margin-bottom: 10px; }
-      #mission-hud p { color: #fff; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px; }
-
-      /* ONBOARDING SCROLL HINT (NEW) */
+      /* ONBOARDING SCROLL HINT */
       #scroll-hint {
         position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
         display: none; flex-direction: column; align-items: center; z-index: 20; 
@@ -208,12 +242,30 @@
     <div id="intro-screen">
       <h1 id="brand-title">SOMIUSIK</h1>
 
-      <button class="cyber-btn" id="start-btn">Power On System</button>
+      <button class="premium-btn btn-red" id="start-btn">
+        POWER ON SYSTEM <div class="accent-bar"></div>
+      </button>
       
-      <div id="selection-buttons" style="display: none; gap: 20px; flex-direction: row; z-index: 51; flex-wrap: wrap; justify-content: center; max-width: 800px;">
-        <button class="cyber-btn" id="btn-direct" style="border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);">Standard Mode</button>
-        <button class="cyber-btn" id="btn-handsfree" style="border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);">Hands-Free Mode</button>
-        <button class="cyber-btn" id="btn-tutorial" style="border-color: var(--neon-orange); color: var(--neon-orange); box-shadow: 0 0 15px rgba(255, 170, 0, 0.4);">System Manual</button>
+      <p id="mobile-warning">[ SYSTEM AWAITING INITIALIZATION ]</p>
+
+      <div id="selection-buttons-container">
+          <div id="selection-buttons" style="display: flex; gap: 20px; flex-direction: row; flex-wrap: wrap; justify-content: center;">
+            
+            <button class="premium-btn btn-cyan desktop-only" id="btn-desktop-start">
+              INITIALIZE RIG <div class="accent-bar"></div>
+            </button>
+
+            <button class="premium-btn btn-cyan mobile-only" id="btn-mobile-standard">
+              TOUCH INTERFACE <div class="accent-bar"></div>
+            </button>
+            <button class="premium-btn btn-green mobile-only" id="btn-mobile-handsfree">
+              OPTICAL TRACKING <div class="accent-bar"></div>
+            </button>
+
+            <button class="premium-btn btn-orange" id="btn-tutorial">
+              SYSTEM MANUAL <div class="accent-bar"></div>
+            </button>
+          </div>
       </div>
 
       <div id="tutorial-panel">
@@ -296,7 +348,9 @@
         </div>
 
         <div style="text-align: center;">
-          <button class="cyber-btn" id="btn-start-from-tutorial" style="border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); cursor: pointer; padding: 18px 50px;">INITIALIZE_DECK</button>
+          <button class="premium-btn btn-cyan" id="btn-start-from-tutorial" style="margin: 0 auto;">
+            LAUNCH DASHBOARD <div class="accent-bar"></div>
+          </button>
         </div>
       </div>
 
@@ -308,11 +362,6 @@
       <div class="chevron"></div>
       <div class="chevron"></div>
       <span id="scroll-hint-text">[ SCROLL / PINCH TO REVEAL SCREEN ]</span>
-    </div>
-
-    <div id="mission-hud">
-      <h3 id="mission-header">MISSION 1/8</h3>
-      <p id="mission-text">Loading...</p>
     </div>
 
     <video id="deck-video" loop muted playsinline style="display: none"></video>
@@ -372,19 +421,30 @@
       import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
       /* =========================================================================
-           0. MOBILE DETECT, FULLSCREEN & INTRO
+           0. MOBILE DETECT, FULLSCREEN & INTRO UI LOGIC
            ========================================================================= */
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
       const introScreen = document.getElementById("intro-screen");
       const brandTitle = document.getElementById("brand-title");
       let isIntroActive = true;
-      let tutorialMode = false;
-      let currentStep = 0;
       let cameraUtils; 
       let useGestures = false;
 
-      if (!isMobile) { introScreen.style.cursor = "none"; }
+      // Handle UI Display based on Device
+      if (isMobile) {
+        document.getElementById("intro-screen").style.cursor = "auto";
+        document.getElementById("mobile-warning").style.display = "block";
+        document.getElementById("gesture-tutorial-container").style.display = "none";
+        document.getElementById("gesture-label").innerText = "OFFLINE (MOBILE)";
+        
+        // Hide Desktop Button
+        document.querySelectorAll('.desktop-only').forEach(el => el.style.display = 'none');
+      } else {
+        introScreen.style.cursor = "none";
+        // Hide Mobile Buttons
+        document.querySelectorAll('.mobile-only').forEach(el => el.style.display = 'none');
+      }
 
       function requestFullScreen() {
         let elem = document.documentElement;
@@ -397,53 +457,34 @@
         }
       }
 
-      const tutorialSteps = [
-        { id: 'load_d1', text: "Click the 'D1' button at the bottom to load a track." },
-        { id: 'play_l', text: "Click the glowing Green PLAY button on Deck 1." },
-        { id: 'vol_l', text: "Click and drag Deck 1's Volume Fader UP." },
-        { id: 'xfader', text: "Drag the Crossfader to the Left to hear Deck 1." },
-        { id: 'scratch', text: "Click and drag the massive Jog Wheel back and forth to seek/scrub." },
-        { id: 'tempo', text: "Drag the Tempo Fader up or down to change Speed. Notice how it snaps to 0%." },
-        { id: 'sfx', text: "Tap the Yellow or Magenta Sampler Pads on the mixer to drop SFX." },
-        { id: 'zoom', text: "Scroll your mouse wheel (or pinch) down to view the entire Stadium Screen." },
-        { id: 'done', text: "SYSTEM MASTERED. YOU ARE READY." }
-      ];
-
-      function advanceTutorial(actionId) {
-          if (!tutorialMode || currentStep >= tutorialSteps.length) return;
-          if (tutorialSteps[currentStep].id === actionId) {
-              currentStep++;
-              if (currentStep < tutorialSteps.length) {
-                  document.getElementById('mission-header').innerText = `MISSION ${currentStep + 1}/${tutorialSteps.length - 1}`;
-                  document.getElementById('mission-text').innerText = tutorialSteps[currentStep].text;
-              } else {
-                  document.getElementById('mission-header').innerText = "COMPLETE";
-                  document.getElementById('mission-text').innerText = tutorialSteps[tutorialSteps.length - 1].text;
-                  document.getElementById('mission-hud').style.borderColor = "var(--neon-green)";
-                  document.querySelector('#mission-hud h3').style.color = "var(--neon-green)";
-                  setTimeout(() => { document.getElementById('mission-hud').style.display = 'none'; }, 4000);
-              }
-          }
-      }
-
       document.getElementById("start-btn").addEventListener("click", () => {
         requestFullScreen();
         document.getElementById("start-btn").style.display = "none";
-        document.getElementById("selection-buttons").style.display = "flex";
+        document.getElementById("mobile-warning").style.display = "none";
+        document.getElementById("selection-buttons-container").style.display = "flex";
       });
 
-      document.getElementById("btn-direct").addEventListener("click", () => {
-        useGestures = false;
-        startExperience(false);
-      });
-
-      document.getElementById("btn-handsfree").addEventListener("click", () => {
+      // DESKTOP ONLY: Always runs gestures
+      document.getElementById("btn-desktop-start").addEventListener("click", () => {
         useGestures = true;
-        startExperience(false);
+        startExperience();
+      });
+
+      // MOBILE ONLY: Touch
+      document.getElementById("btn-mobile-standard").addEventListener("click", () => {
+        useGestures = false;
+        startExperience();
+      });
+
+      // MOBILE ONLY: Gestures
+      document.getElementById("btn-mobile-handsfree").addEventListener("click", () => {
+        useGestures = true;
+        startExperience();
       });
       
+      // BOTH DEVICES: Manual
       document.getElementById("btn-tutorial").addEventListener("click", () => {
-        document.getElementById("selection-buttons").style.display = "none";
+        document.getElementById("selection-buttons-container").style.display = "none";
         brandTitle.style.display = "none"; 
         const panel = document.getElementById("tutorial-panel");
         panel.style.display = "block";
@@ -451,9 +492,10 @@
         if (!isMobile) introScreen.style.cursor = "default"; 
       });
       
+      // LAUNCH FROM MANUAL
       document.getElementById("btn-start-from-tutorial").addEventListener("click", () => {
-        useGestures = true;
-        startExperience(true);
+        useGestures = !isMobile; // Auto-activate if on PC, disable if on Mobile (unless they clicked hands-free first, but this resets it cleanly)
+        startExperience();
       });
 
       function startCamera() {
@@ -466,17 +508,10 @@
         cameraUtils.start().catch(() => { document.getElementById("gesture-label").innerText = "CAMERA OFFLINE"; });
       }
 
-      function startExperience(isTutorial) {
+      function startExperience() {
         requestFullScreen();
         isIntroActive = false; 
         audio.init(); 
-        
-        if (isTutorial) {
-            tutorialMode = true;
-            document.getElementById('mission-hud').style.display = "block";
-            document.getElementById('mission-header').innerText = `MISSION 1/${tutorialSteps.length - 1}`;
-            document.getElementById('mission-text').innerText = tutorialSteps[0].text;
-        }
 
         document.getElementById("deck-video").play().catch(e=>e);
         document.getElementById("center-video").play().catch(e=>e);
@@ -497,13 +532,12 @@
             onComplete: () => { 
                 controls.enabled = true; 
                 
-                // Trigger 3x Bounce Animation
                 const hint = document.getElementById("scroll-hint");
                 hint.style.display = "flex";
                 
                 let tl = gsap.timeline();
                 tl.to(hint, { opacity: 1, duration: 0.5 })
-                  .to(hint, { y: -25, duration: 1, yoyo: true, repeat: 5, ease: "power1.inOut" }) // 1 down + 5 repeats = 3 full 2-second bounces
+                  .to(hint, { y: -25, duration: 1, yoyo: true, repeat: 5, ease: "power1.inOut" })
                   .to(hint, { opacity: 0, duration: 0.5, onComplete: () => hint.style.display = "none" });
             } 
         });
@@ -546,7 +580,7 @@
       }, {passive: true});
 
       introScreen.addEventListener("touchstart", (e) => {
-        if(e.target.tagName === 'BUTTON') return;
+        if(e.target.tagName === 'BUTTON' || e.target.closest('.premium-btn')) return;
         spawnTrail(e.touches[0].clientX, e.touches[0].clientY);
       }, {passive: true});
 
@@ -556,7 +590,6 @@
 
       let targetDeck = null; 
       
-      // 6-SIDED CAROUSEL MATH
       function updateCarouselVideos() {
           let normalizedAngle = ((-currentAngle % 360) + 360) % 360;
           let activeIndex = Math.round(normalizedAngle / 60) % 6;
@@ -593,7 +626,6 @@
         div.innerText = `${displayName}`;
         div.onclick = () => { 
             audio.loadAudioFile(targetDeck, `${file}`); 
-            if(targetDeck === 'L') advanceTutorial('load_d1'); 
             closeModals(); 
         };
         audioList.appendChild(div);
@@ -608,7 +640,6 @@
         videoCarousel.appendChild(div);
       });
 
-      // Drag Math adjusted for 6 items
       let isSpinning = false, startX = 0, currentAngle = 0, startAngle = 0, isDragging = false;
       const wrap = document.getElementById('carousel-wrap');
       wrap.onmousedown = (e) => { isSpinning = true; startX = e.pageX || e.touches[0].pageX; startAngle = currentAngle; isDragging = false; };
@@ -630,7 +661,7 @@
       window.addEventListener('mouseup', () => { isSpinning = false; });
       window.addEventListener('touchend', () => { isSpinning = false; });
 
-      document.getElementById("custom-audio-input").addEventListener("change", (e) => { if(e.target.files[0]) { audio.handleCustomAudio(targetDeck, e.target.files[0]); if(targetDeck==='L') advanceTutorial('load_d1'); closeModals(); } });
+      document.getElementById("custom-audio-input").addEventListener("change", (e) => { if(e.target.files[0]) { audio.handleCustomAudio(targetDeck, e.target.files[0]); closeModals(); } });
       document.getElementById("custom-video-input").addEventListener("change", (e) => { if(e.target.files[0]) { loadVideoToTarget(targetDeck, URL.createObjectURL(e.target.files[0])); closeModals(); } });
 
       function loadVideoToTarget(target, srcURL) {
@@ -669,9 +700,6 @@
       controls.enableDamping = true; controls.dampingFactor = 0.05;
       controls.maxPolarAngle = Math.PI / 1.8; controls.minDistance = 5; controls.maxDistance = 250;
       controls.target.set(0, 2, 0); controls.enabled = false;
-
-      controls.domElement.addEventListener('wheel', () => { advanceTutorial('zoom'); });
-      controls.domElement.addEventListener('touchmove', (e) => { if(e.touches.length > 1) advanceTutorial('zoom'); });
 
       const renderScene = new RenderPass(scene, camera);
       const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.4, 0.6, 0.85);
@@ -787,7 +815,6 @@
         cueCore.userData = { type: "reverse", side: side }; interactables.push(cueCore); 
         deck.add(cueBezel); deck.add(cueCore);
 
-        // PIONEER TEMPO FADER + 0% GREEN LED MARKER
         const tempoTrack = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.1, 4.0), matDarkPlastic);
         tempoTrack.position.set(2.8, 1.22, 1.5); 
         
@@ -931,7 +958,7 @@
           this.sourceL.connect(this.eqL.trim); this.eqL.trim.connect(this.eqL.high); this.eqL.high.connect(this.eqL.mid); this.eqL.mid.connect(this.eqL.low); this.eqL.low.connect(this.gainL);
           this.sourceR.connect(this.eqR.trim); this.eqR.trim.connect(this.eqR.high); this.eqR.high.connect(this.eqR.mid); this.eqR.mid.connect(this.eqR.low); this.eqR.low.connect(this.gainR);
 
-          this.gainL.connect(this.analyserL); this.analyserL.connect(this.analyserL).connect(this.masterGain);
+          this.gainL.connect(this.analyserL); this.analyserL.connect(this.masterGain);
           this.gainR.connect(this.analyserR); this.analyserR.connect(this.masterGain);
           this.masterGain.connect(this.ctx.destination);
         }
@@ -942,8 +969,6 @@
         }
 
         playSFX(type) {
-            advanceTutorial('sfx'); 
-            
             if (type === 'eagle') {
                 let eagleSound = new Audio('eagle.mp3');
                 eagleSound.play().catch(e => console.warn("Cannot find 'eagle.mp3'. Ensure it is in the root folder."));
@@ -983,7 +1008,6 @@
         }
         
         togglePlay(side) {
-            if(side === 'L') advanceTutorial('play_l'); 
             let el = side === 'L' ? this.audioL : this.audioR;
             let isPlaying = side === 'L' ? State.isPlayingL : State.isPlayingR;
 
@@ -999,7 +1023,6 @@
         setPlaybackRate(side, value) {
             let el = side === 'L' ? this.audioL : this.audioR;
             el.playbackRate = value; State[side === "L" ? "rateL" : "rateR"] = value;
-            advanceTutorial('tempo'); 
         }
         updateVolumes() {
           let x = (State.crossfader + 1) / 2;
@@ -1015,7 +1038,6 @@
         pauseForScrub(side) {}
         
         applyScrubDelta(side, timeDeltaSecs) {
-            advanceTutorial('scratch'); 
             let el = side === 'L' ? this.audioL : this.audioR;
             el.currentTime = Math.max(0, el.currentTime + timeDeltaSecs);
         }
@@ -1088,13 +1110,11 @@
           let newVal = startRot - (deltaY * 0.005);
           newVal = Math.max(0, Math.min(1, newVal));
           State[activeObj.userData.side === "L" ? "volL" : "volR"] = newVal; audio.updateVolumes();
-          if (activeObj.userData.side === 'L' && newVal > 0.8) advanceTutorial('vol_l'); 
         } else if (activeObj.userData.type === "crossFader") {
           const deltaX = clientX - startMouseX; 
           let newVal = startRot + (deltaX * 0.005);
           newVal = Math.max(-1, Math.min(1, newVal));
           State.crossfader = newVal; audio.updateVolumes();
-          if (newVal < -0.5) advanceTutorial('xfader'); 
         } else if (activeObj.userData.type === "tempoFader") {
           const deltaY = clientY - startMouseY; 
           let newVal = startRot - (deltaY * 0.002);
@@ -1189,7 +1209,7 @@
             const isFullPalm = isIndexOpen && isMiddleOpen && !isRingClosed && !isPinkyClosed && pinchDist > 0.1;
 
             if (isPeaceSign) {
-              if (isLeftSideOfScreen) { currentPeaceL = true; if (!peaceLockL) { audio.togglePlay("L"); peaceLockL = true; advanceTutorial('play_l'); } activeHandsText.push("CH1: PLAY TGL");
+              if (isLeftSideOfScreen) { currentPeaceL = true; if (!peaceLockL) { audio.togglePlay("L"); peaceLockL = true; } activeHandsText.push("CH1: PLAY TGL");
               } else { currentPeaceR = true; if (!peaceLockR) { audio.togglePlay("R"); peaceLockR = true; } activeHandsText.push("CH2: PLAY TGL"); }
             } else if (isFullPalm) {
               if (isLeftSideOfScreen) { currentPalmL = true; if (!palmLockL) { audio.toggleReverse("L"); palmLockL = true; } activeHandsText.push("CH1: SKIP BACK");
