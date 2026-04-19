@@ -26,16 +26,6 @@
       * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
       body { background-color: var(--bg-color); color: white; overflow: hidden; width: 100vw; height: 100vh; font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
 
-      /* --- PRELOADER (1.png / 2.png Loop) --- */
-      #preloader {
-        position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: #000000; z-index: 9999; display: flex; flex-direction: column;
-        justify-content: center; align-items: center; transition: opacity 0.5s ease;
-      }
-      #preloader-img { width: 180px; filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.5)); transition: transform 0.1s ease; }
-      .preloader-text { margin-top: 25px; color: var(--neon-cyan); font-family: 'Courier New', monospace; font-weight: bold; letter-spacing: 5px; animation: pulse 1s infinite alternate; }
-      @keyframes pulse { from { opacity: 0.5; } to { opacity: 1; } }
-
       #webgl-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; cursor: grab; }
       #webgl-container:active { cursor: grabbing; }
 
@@ -249,11 +239,6 @@
     </style>
   </head>
   <body>
-    <div id="preloader">
-      <img id="preloader-img" src="1.png" alt="Loading">
-      <div class="preloader-text">INITIALIZING ENGINE...</div>
-    </div>
-
     <div id="intro-screen">
       <h1 id="brand-title">SOMIUSIK</h1>
 
@@ -432,25 +417,6 @@
       import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
       import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
       import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-
-      /* =========================================================================
-           0. PRELOADER LOGIC (Runs Immediately)
-           ========================================================================= */
-      let preloaderCycles = 0;
-      const preloaderImg = document.getElementById("preloader-img");
-      const preloaderWrap = document.getElementById("preloader");
-      
-      const preloaderInterval = setInterval(() => {
-        preloaderCycles++;
-        preloaderImg.src = (preloaderCycles % 2 === 0) ? '1.png' : '2.png';
-        
-        // 8 cycles = 4 full loops (2 seconds total at 250ms per tick)
-        if (preloaderCycles >= 8) { 
-          clearInterval(preloaderInterval);
-          preloaderWrap.style.opacity = '0';
-          setTimeout(() => { preloaderWrap.style.display = 'none'; }, 500);
-        }
-      }, 250);
 
       /* =========================================================================
            1. MOBILE DETECT, FULLSCREEN & INTRO UI LOGIC
