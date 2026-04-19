@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SOMIUSIK | Pro Interactive Rig</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
     <link rel="preload" href="1.png" as="image" />
     <link rel="preload" href="2.png" as="image" />
 
@@ -40,7 +44,6 @@
         perspective: 1000px; overflow: hidden;
       }
       
-      /* --- RESTORED ORIGINAL BRAND TITLE FONT --- */
       #brand-title {
         font-family: "Arial Black", Impact, sans-serif;
         font-size: 12vw;
@@ -61,7 +64,7 @@
         #brand-title { font-size: 8rem; }
       }
 
-      /* --- BRUTALIST TECH BUTTONS (Connaught Place Style) --- */
+      /* --- BRUTALIST TECH BUTTONS --- */
       .tech-btn {
         background: transparent; border: none; cursor: pointer;
         display: flex; flex-direction: column; align-items: flex-start;
@@ -83,7 +86,6 @@
       }
       .tech-btn .sub-icon { font-family: monospace; font-size: 0.8rem; letter-spacing: -1px; }
 
-      /* Color Variations */
       .btn-red { color: var(--neon-red); }
       .btn-red .sub-line { background: var(--neon-red); }
       .btn-red .sub-box { background: var(--neon-red); }
@@ -102,6 +104,14 @@
 
       #selection-buttons-container {
         display: none; z-index: 51; flex-direction: column; align-items: center; width: 100%; max-width: 900px;
+      }
+
+      /* MOBILE DESKTOP WARNING */
+      #mobile-message {
+        display: none; color: var(--neon-green); font-family: 'VT323', monospace; 
+        text-align: center; margin-top: 30px; font-size: 1.5rem; letter-spacing: 2px;
+        text-transform: uppercase; text-shadow: 0 0 10px rgba(191, 255, 0, 0.4);
+        z-index: 51; pointer-events: none;
       }
 
       /* --- PRO UI/UX SYSTEM MANUAL (HUD) --- */
@@ -139,10 +149,21 @@
       #status-bar { position: absolute; top: 15px; left: 15px; z-index: 10; font-size: 0.85rem; background: var(--glass-bg); padding: 15px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); pointer-events: none; }
       .neon-text { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); font-weight: bold; font-family: "Courier New", monospace; }
 
-      /* COMPACT BUTTONS UI */
+      /* COMPACT BUTTONS UI - LEFT CORNER */
       #video-upload-container { position: absolute; top: 130px; left: 15px; z-index: 15; display: flex; flex-direction: column; gap: 10px; }
-      #ui-layer { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); padding: 15px 30px; z-index: 10; background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; gap: 40px; }
-      .btn-box { display: flex; justify-content: center; align-items: center; width: 60px; height: 40px; font-size: 1.1rem; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; border-radius: 4px; cursor: pointer; transition: 0.3s; background: rgba(255, 255, 255, 0.1); }
+      
+      #ui-layer { 
+        position: absolute; bottom: 25px; left: 15px; padding: 10px; z-index: 10; 
+        background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); 
+        border-radius: 8px; display: flex; flex-direction: column; gap: 10px;
+      }
+      
+      .btn-box { 
+        display: flex; justify-content: center; align-items: center; width: 45px; height: 35px; 
+        font-family: 'VT323', monospace; font-size: 1.4rem; letter-spacing: 1px;
+        border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; border-radius: 4px; 
+        cursor: pointer; transition: 0.3s; background: rgba(255, 255, 255, 0.1); 
+      }
       .btn-box:hover { border-color: var(--play-purple); color: var(--play-purple); background: rgba(123, 0, 255, 0.15); }
       .btn-box.active { border-color: var(--neon-green); color: var(--neon-green); }
 
@@ -164,11 +185,11 @@
       .audio-list { width: 400px; max-height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; padding-right: 10px; }
       .audio-list::-webkit-scrollbar { width: 8px; }
       .audio-list::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 4px; }
-      .media-item { padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; text-align: center; border-radius: 4px; transition: 0.2s; color: white; font-weight: bold; letter-spacing: 1px;}
+      .media-item { padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; text-align: center; border-radius: 4px; transition: 0.2s; color: white; font-family: 'VT323', monospace; font-size: 1.4rem; letter-spacing: 2px;}
       .media-item:hover { background: var(--neon-cyan); color: #000; border-color: var(--neon-cyan); }
       .custom-upload-wrap { position: relative; overflow: hidden; display: inline-block; margin-top: 20px; }
       .custom-upload-wrap input[type=file] { position: absolute; top: 0; right: 0; min-width: 100%; min-height: 100%; opacity: 0; cursor: pointer; }
-      .custom-btn { padding: 15px 30px; background: #222; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+      .custom-btn { padding: 15px 30px; background: #222; border: 1px solid var(--neon-cyan); color: var(--neon-cyan); border-radius: 4px; font-family: 'Arial Black', sans-serif; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
       .custom-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
 
       /* 3D 6-Sided Carousel */
@@ -238,6 +259,8 @@
               </div>
             </button>
           </div>
+          
+          <p id="mobile-message">OPEN IN DESKTOP FOR BETTER EXPERIENCE</p>
       </div>
 
       <div id="tutorial-panel">
@@ -349,10 +372,6 @@
       import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
       import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-      // --- JAVASCRIPT PRELOADER HACK TO PREVENT IMAGE POP-IN ---
-      const preload1 = new Image(); preload1.src = '1.png';
-      const preload2 = new Image(); preload2.src = '2.png';
-
       /* =========================================================================
            1. FULLSCREEN, INTRO UI, & MODE SWITCHING LOGIC
            ========================================================================= */
@@ -366,8 +385,7 @@
       let isTrackingActive = false; 
       let hasCameraBooted = false;
 
-      if (!isMobile) { introScreen.style.cursor = "none"; }
-
+      // ANYWHERE FULLSCREEN TRIGGER
       function requestFullScreen() {
         let elem = document.documentElement;
         if (elem.requestFullscreen) { elem.requestFullscreen().catch(e=>e); } 
@@ -379,10 +397,25 @@
         }
       }
 
-      document.getElementById("start-btn").addEventListener("click", () => {
+      introScreen.addEventListener("click", () => {
+        if (isIntroActive) requestFullScreen();
+      });
+      introScreen.addEventListener("touchstart", () => {
+        if (isIntroActive) requestFullScreen();
+      }, {passive: true});
+
+      if (!isMobile) { 
+        introScreen.style.cursor = "none"; 
+      }
+
+      document.getElementById("start-btn").addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevents double firing
         requestFullScreen();
         document.getElementById("start-btn").style.display = "none";
         document.getElementById("selection-buttons-container").style.display = "flex";
+        if (isMobile) {
+            document.getElementById("mobile-message").style.display = "block";
+        }
       });
 
       // Show/Hide buttons based on device
@@ -528,11 +561,6 @@
       });
 
       introScreen.addEventListener("touchmove", (e) => {
-        spawnTrail(e.touches[0].clientX, e.touches[0].clientY);
-      }, {passive: true});
-
-      introScreen.addEventListener("touchstart", (e) => {
-        if(e.target.tagName === 'BUTTON' || e.target.closest('.tech-btn')) return;
         spawnTrail(e.touches[0].clientX, e.touches[0].clientY);
       }, {passive: true});
 
