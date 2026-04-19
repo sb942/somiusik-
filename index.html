@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SOMIUSIK | Pro Interactive Rig</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
     <link rel="preload" href="1.png" as="image" />
     <link rel="preload" href="2.png" as="image" />
 
@@ -21,12 +17,12 @@
       :root {
         --neon-purple: #9d00ff;
         --neon-cyan: #00ffcc;
-        --neon-green: #bfff00; /* Adjusted to match the specific Connaught Place green */
+        --neon-green: #bfff00; 
         --studio-white: #ffffff;
-        --neon-red: #ff0000;   /* Pure red for ALIENKIND vibe */
+        --neon-red: #ff0000;   
         --neon-orange: #ffaa00;
         --play-purple: #7b00ff;
-        --bg-color: #050505;   /* Darker, starker background */
+        --bg-color: #050505;   
         --glass-bg: rgba(10, 10, 15, 0.95);
         --glass-border: rgba(255, 255, 255, 0.1);
       }
@@ -43,37 +39,23 @@
         justify-content: center; align-items: center; transition: opacity 1s ease;
         perspective: 1000px; overflow: hidden;
       }
-
-      /* --- ALIENKIND STYLE NEON SIGN --- */
-      .alien-sign {
-        border: 2px solid #330000;
-        background: rgba(10, 0, 0, 0.8);
-        padding: 20px 40px;
-        margin-bottom: 60px;
-        text-align: center;
-        box-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
-        z-index: 50;
-        pointer-events: none;
-      }
+      
+      /* --- RESTORED ORIGINAL BRAND TITLE FONT --- */
       #brand-title {
-        font-family: 'VT323', monospace;
-        font-size: 15vw;
+        font-family: "Arial Black", Impact, sans-serif;
+        font-size: 12vw;
+        font-weight: 900;
+        font-style: italic;
         color: var(--neon-red);
-        line-height: 0.75;
-        margin: 0;
-        text-shadow: 0 0 20px var(--neon-red);
-        letter-spacing: 2px;
-      }
-      .alien-subtitle {
-        font-family: 'Courier New', monospace;
-        color: #aa0000;
-        font-size: 0.8rem;
-        font-weight: bold;
-        letter-spacing: 3px;
-        border-top: 1px solid #440000;
-        padding-top: 10px;
-        margin-top: 10px;
+        background: transparent;
         text-transform: uppercase;
+        letter-spacing: -2px;
+        line-height: 0.85;
+        margin-bottom: 40px;
+        text-align: center;
+        transition: transform 0.1s ease-out;
+        pointer-events: none;
+        z-index: 50;
       }
       @media (min-width: 768px) {
         #brand-title { font-size: 8rem; }
@@ -206,10 +188,7 @@
   <body>
     <div id="intro-screen">
       
-      <div class="alien-sign">
-        <h1 id="brand-title">SOMIUSIK</h1>
-        <div class="alien-subtitle">SYSTEM AWAITING INITIALIZATION RATHER BE A DJ</div>
-      </div>
+      <h1 id="brand-title">SOMIUSIK</h1>
 
       <button class="tech-btn btn-red" id="start-btn">
         <span class="main-text">POWER<br>SYSTEM</span>
@@ -425,7 +404,7 @@
       
       document.getElementById("btn-tutorial").addEventListener("click", () => {
         document.getElementById("selection-buttons-container").style.display = "none";
-        document.querySelector(".alien-sign").style.display = "none"; 
+        brandTitle.style.display = "none"; 
         const panel = document.getElementById("tutorial-panel");
         panel.style.display = "block";
         gsap.to(panel, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" });
@@ -597,7 +576,10 @@
         let div = document.createElement("div"); div.className = "media-item"; 
         let displayName = file.split('.').slice(0, -1).join('.').toUpperCase();
         div.innerText = `${displayName}`;
-        div.onclick = () => { audio.loadAudioFile(targetDeck, `${file}`); closeModals(); };
+        div.onclick = () => { 
+            audio.loadAudioFile(targetDeck, `${file}`); 
+            closeModals(); 
+        };
         audioList.appendChild(div);
       });
 
@@ -641,7 +623,11 @@
         if(target === 'center') document.getElementById("btn-cfx").classList.add("active");
       }
 
-      const State = { volL: 0.8, volR: 0.8, crossfader: 0, isPlayingL: false, isPlayingR: false, rateL: 1.0, rateR: 1.0 };
+      const State = {
+        volL: 0.8, volR: 0.8, crossfader: 0,
+        isPlayingL: false, isPlayingR: false,
+        rateL: 1.0, rateR: 1.0,
+      };
 
       /* =========================================================================
            2. 3D SYSTEM & LIGHTING
