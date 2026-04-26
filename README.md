@@ -1,3 +1,4 @@
+SOMIUSIK!!
 An immersive, interactive 3D CD and vinyl record gallery built for the web. Somiusik transforms standard album displays into a fully navigable 3D environment, allowing users to browse and interact with their favorite music covers in a dynamic virtual space.
 
 Features
